@@ -2,10 +2,6 @@ name: Verify Bash Action
 
 on:
   pull_request:
-    branches:
-      - main
-    types: [ opened, edited, synchronize ]
-  push:
   workflow_dispatch:
 
 jobs:
@@ -47,8 +43,9 @@ jobs:
 
       - name: "Clone test project"
         uses: actions/checkout@v2
-        repository: "phorus-group/mapper"
-        path: "mapper"
+        with:
+          repository: "phorus-group/mapper"
+          path: "mapper"
 
       - name: "Call action"
         uses: ./
