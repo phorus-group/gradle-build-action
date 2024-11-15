@@ -27,23 +27,6 @@ jobs:
           BUILD_AND_TEST: true
 
       - name: Report Status Check
-        if: always()
-        run: |
-          export GH_TOKEN="${{ github.token }}"
-          CHECK_NAME="${{ github.workflow }}"
-          STATE="${{ steps.action.outcome }}"
-          DESCRIPTION="Workflow state - ${STATE}."
-          
-          echo "The '$CHECK_NAME' state is - $STATE"
-
-          CHECK_RUN_ID=$(gh api --method POST /repos/${{ github.repository }}/check-runs \
-            -f name="$CHECK_NAME" \
-            -f head_sha="${{ github.sha }}" \
-            -f status="completed" \
-              -f conclusion="$STATE" \
-            -f output.summary="$DESCRIPTION" \
-            -f output.text="$DESCRIPTION" \
-            -f output.title="Workflow Status" \
-            -q '.id')
-
-          echo "Check created with ID: $CHECK_RUN_ID"
+        uses: phorus-group/workflow-status-check-action@main
+        with:
+          STATE: ${{ steps.action.outcome }}
