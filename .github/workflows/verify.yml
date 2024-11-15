@@ -1,6 +1,10 @@
 name: Verify Bash Action
 
 on:
+  pull_request:
+    branches:
+      - main
+    types: [ opened, edited, synchronize ]
   push:
   workflow_dispatch:
 
