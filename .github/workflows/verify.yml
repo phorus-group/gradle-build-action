@@ -18,10 +18,10 @@ jobs:
           path: "mapper"
 
       - name: "Call action"
-        working-directory: "./mapper"
         uses: ./
         with:
           BUILD_AND_TEST: true
+        working-directory: "./mapper"
 
       - name: Set status output for reporting
         id: set_status
