@@ -33,6 +33,7 @@ runs:
 
     - name: "Setup GAWK"
       run: sudo apt-get install -y gawk
+      shell: bash
 
     - name: "Run build and tests"
       run: |
