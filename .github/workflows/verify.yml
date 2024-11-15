@@ -26,24 +26,11 @@ jobs:
         with:
           BUILD_AND_TEST: true
 
-      - name: Set status output for reporting
-        id: set_status
-        if: always()
-        run: |
-          # Check the exit code of the previous step
-          if [ ${{ steps.action.outcome }} != "success" ]; then
-            echo "ye"
-            echo "status=success" >> "$GITHUB_ENV"
-          else
-            echo "no"
-            echo "status=failure" >> "$GITHUB_ENV"
-          fi
-
       - name: Report Status Check
         if: always()
         run: |
           CHECK_NAME="${{ github.workflow }}"
-          STATE="${{ needs.self_check.outputs.status }}"
+          STATE="${{ steps.action.outcome }}"
           DESCRIPTION="Workflow state - ${STATE}."
           echo "State is $STATE"
 
