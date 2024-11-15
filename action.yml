@@ -9,15 +9,17 @@ inputs:
   JACOCO_CSV_LOCATION:
     description: "Location of Jacoco CSV report, only used if BUILD_AND_TEST is set to true"
     required: false
-    type: string
     default: "./build/reports/jacoco/test/jacocoTestReport.csv"
 outputs:
   TOTAL_LINES:
     description: "Total lines to cover with tests, only set if BUILD_AND_TEST is set to true"
+    value: ${{ steps.build_and_test.outputs.total-lines }}
   LINES_COVERED:
     description: "Total lines to covered with tests, only set if BUILD_AND_TEST is set to true"
+    value: ${{ steps.build_and_test.outputs.lines-covered }}
   COVERAGE_PERCENTAGE:
     description: "The coverage percentage, only set if BUILD_AND_TEST is set to true"
+    value: ${{ steps.build_and_test.outputs.coverage-percentage }}
 
 runs:
   using: composite
@@ -32,20 +34,22 @@ runs:
       uses: gradle/actions/setup-gradle@v4
 
     - name: "Run build and tests"
+      id: build_and_test
       run: |
         ./gradlew --build-cache build
-        if [ -f $JACOCO_CSV_LOCATION ]; then
-          awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' $JACOCO_CSV_LOCATION
-          echo "TOTAL_LINES=$(awk -F"," '{ instructions += $4 + $5 } END { print instructions }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
-          echo "LINES_COVERED=$(awk -F"," '{ covered += $5 } END { print covered }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
-          echo "COVERAGE_PERCENTAGE=$(awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print 100*covered/instructions }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
+        if [ -f ${{ inputs.JACOCO_CSV_LOCATION }} ]; then
+          awk -F "," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' ${{ inputs.JACOCO_CSV_LOCATION }}
+          echo "total-lines=$(awk -F "," '{ instructions += $4 + $5 } END { print instructions }' ${{ inputs.JACOCO_CSV_LOCATION }})" >> "$GITHUB_OUTPUT"
+          echo "lines-covered=$(awk -F "," '{ covered += $5 } END { print covered }' ${{ inputs.JACOCO_CSV_LOCATION }})" >> "$GITHUB_OUTPUT"
+          echo "coverage-percentage=$(awk -F "," '{ instructions += $4 + $5; covered += $5 } END { print 100*covered/instructions }' ${{ inputs.JACOCO_CSV_LOCATION }})" >> "$GITHUB_OUTPUT"
         else
           echo -e "\e[33mJacoco CSV coverage report not found!\e[0m"
         fi
       if: ${{ inputs.BUILD_AND_TEST == 'true' }}
+      shell: bash
 
     - name: "Run build"
       run: |
         ./gradlew --build-cache build testClasses -x check
-        echo "outcome=green" >> "$GITHUB_OUTPUT"
       if: ${{ inputs.BUILD_AND_TEST != 'true' }}
+      shell: bash
