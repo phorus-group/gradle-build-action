@@ -30,7 +30,7 @@ jobs:
         if: always()
         run: |
           # Check the exit code of the previous step
-          if [ $? -eq 0 ]; then
+          if [ failure() ]; then
             echo "ye"
             echo "status=success" >> "$GITHUB_ENV"
           else
@@ -52,6 +52,8 @@ jobs:
           CHECK_NAME="${{ github.workflow }}"
           STATE="${{ needs.self_check.outputs.status }}"
           DESCRIPTION="Workflow state - ${STATE}."
+          echo $STATE
+          echo ${{ needs.self_check.outcome }}
 
           CHECK_RUN_ID=$(gh api --method POST /repos/${{ github.repository }}/check-runs \
             -f name="$CHECK_NAME" \

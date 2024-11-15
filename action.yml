@@ -52,6 +52,5 @@ runs:
     - name: "Run build"
       run: |
         ./gradlew --build-cache build testClasses -x check
-        echo "outcome=green" >> "$GITHUB_OUTPUT"
       if: ${{ inputs.BUILD_AND_TEST != 'true' }}
       shell: bash
