@@ -1,6 +1,8 @@
 name: Verify Bash Action
 
-on: push, workflow_dispatch
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   static_checks:
