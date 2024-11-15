@@ -9,16 +9,19 @@ jobs:
     name: Run this Action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - name: "Clone test project"
         uses: actions/checkout@v4
         with:
           repository: phorus-group/mapper
+
+      - name: "Clone action"
+        uses: actions/checkout@v4
+        with:
+          path: action
           clean: false
 
       - name: "Call action"
-        uses: ./
+        uses: ./action
         with:
           BUILD_AND_TEST: true
 
