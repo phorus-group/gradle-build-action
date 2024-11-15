@@ -45,7 +45,7 @@ jobs:
       - name: Report Status Check
         if: always()
         run: |
-          $CHECK_NAME="${{ github.workflow }}"
+          CHECK_NAME="${{ github.workflow }}"
           STATE="${{ needs.self_check.outputs.status }}"
           DESCRIPTION="Workflow state - ${STATE}."
 
