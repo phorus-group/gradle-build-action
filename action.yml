@@ -34,13 +34,11 @@ runs:
     - name: "Run build and tests"
       run: |
         ./gradlew --build-cache build
-        if [ -f $JACOCO_CSV_LOCATION ]; then
-          echo "File is $JACOCO_CSV_LOCATION"
-          echo "Content is $(cat $JACOCO_CSV_LOCATION)"
-          awk -F "," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' $JACOCO_CSV_LOCATION
-          echo "TOTAL_LINES=$(awk -F "," '{ instructions += $4 + $5 } END { print instructions }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
-          echo "LINES_COVERED=$(awk -F "," '{ covered += $5 } END { print covered }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
-          echo "COVERAGE_PERCENTAGE=$(awk -F "," '{ instructions += $4 + $5; covered += $5 } END { print 100*covered/instructions }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
+        if [ -f ${{ inputs.JACOCO_CSV_LOCATION }} ]; then
+          awk -F "," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' ${{ inputs.JACOCO_CSV_LOCATION }}
+          echo "TOTAL_LINES=$(awk -F "," '{ instructions += $4 + $5 } END { print instructions }' ${{ inputs.JACOCO_CSV_LOCATION }})" >> "$GITHUB_OUTPUT"
+          echo "LINES_COVERED=$(awk -F "," '{ covered += $5 } END { print covered }' ${{ inputs.JACOCO_CSV_LOCATION }})" >> "$GITHUB_OUTPUT"
+          echo "COVERAGE_PERCENTAGE=$(awk -F "," '{ instructions += $4 + $5; covered += $5 } END { print 100*covered/instructions }' ${{ inputs.JACOCO_CSV_LOCATION }})" >> "$GITHUB_OUTPUT"
         else
           echo -e "\e[33mJacoco CSV coverage report not found!\e[0m"
         fi
