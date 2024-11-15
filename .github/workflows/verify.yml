@@ -31,9 +31,12 @@ jobs:
         run: |
           CHECK_NAME="${{ github.workflow }}"
           STATE="${{ steps.action.outcome }}"
-          DESCRIPTION="Workflow state - ${STATE}."
-          echo "State is $STATE"
+          
+          echo "The '$CHECK_NAME' state is - $STATE"
 
+          DESCRIPTION="Workflow state - ${STATE}."
+
+          GH_TOKEN: ${{ github.token }}
           CHECK_RUN_ID=$(gh api --method POST /repos/${{ github.repository }}/check-runs \
             -f name="$CHECK_NAME" \
             -f head_sha="${{ github.sha }}" \
