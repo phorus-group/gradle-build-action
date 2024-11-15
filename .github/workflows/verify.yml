@@ -29,9 +29,9 @@ jobs:
       - name: Report Status Check
         if: always()
         run: |
+          export GH_TOKEN="${{ github.token }}"
           CHECK_NAME="${{ github.workflow }}"
           STATE="${{ steps.action.outcome }}"
-          GH_TOKEN="${{ github.token }}"
           DESCRIPTION="Workflow state - ${STATE}."
           
           echo "The '$CHECK_NAME' state is - $STATE"
