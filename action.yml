@@ -35,8 +35,9 @@ runs:
       run: |
         ./gradlew --build-cache build
         if [ -f $JACOCO_CSV_LOCATION ]; then
+          cat $JACOCO_CSV_LOCATION
           echo $(pwd)
-          echo $(ls -la)
+          echo $(ls)
           awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' $JACOCO_CSV_LOCATION
           echo "TOTAL_LINES=$(awk -F"," '{ instructions += $4 + $5 } END { print instructions }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
           echo "LINES_COVERED=$(awk -F"," '{ covered += $5 } END { print covered }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
