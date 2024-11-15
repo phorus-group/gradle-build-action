@@ -21,6 +21,7 @@ jobs:
           clean: false
 
       - name: "Call action"
+        id: action
         uses: ./action
         with:
           BUILD_AND_TEST: true
@@ -30,7 +31,7 @@ jobs:
         if: always()
         run: |
           # Check the exit code of the previous step
-          if [ failure() ]; then
+          if [ ${{ steps.action.outcome }} != "success" ]; then
             echo "ye"
             echo "status=success" >> "$GITHUB_ENV"
           else
