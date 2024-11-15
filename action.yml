@@ -34,17 +34,17 @@ runs:
     - name: "Setup GAWK"
       run: |
         sudo apt update
-        sudo apt-get install -y gawk
+        sudo apt-get install -y mawk
       shell: bash
 
     - name: "Run build and tests"
       run: |
         ./gradlew --build-cache build
         if [ -f $JACOCO_CSV_LOCATION ]; then
-          gawk -F "," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' $JACOCO_CSV_LOCATION
-          echo "TOTAL_LINES=$(gawk -F "," '{ instructions += $4 + $5 } END { print instructions }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
-          echo "LINES_COVERED=$(gawk -F "," '{ covered += $5 } END { print covered }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
-          echo "COVERAGE_PERCENTAGE=$(gawk -F "," '{ instructions += $4 + $5; covered += $5 } END { print 100*covered/instructions }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
+          mawk -F "," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' $JACOCO_CSV_LOCATION
+          echo "TOTAL_LINES=$(mawk -F "," '{ instructions += $4 + $5 } END { print instructions }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
+          echo "LINES_COVERED=$(mawk -F "," '{ covered += $5 } END { print covered }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
+          echo "COVERAGE_PERCENTAGE=$(mawk -F "," '{ instructions += $4 + $5; covered += $5 } END { print 100*covered/instructions }' $JACOCO_CSV_LOCATION)" >> "$GITHUB_OUTPUT"
         else
           echo -e "\e[33mJacoco CSV coverage report not found!\e[0m"
         fi
