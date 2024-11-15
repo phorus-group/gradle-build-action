@@ -31,8 +31,10 @@ jobs:
         run: |
           # Check the exit code of the previous step
           if [ $? -eq 0 ]; then
+            echo "ye"
             echo "status=success" >> "$GITHUB_ENV"
           else
+            echo "no"
             echo "status=failure" >> "$GITHUB_ENV"
           fi
 
@@ -55,7 +57,7 @@ jobs:
             -f name="$CHECK_NAME" \
             -f head_sha="${{ github.sha }}" \
             -f status="completed" \
-            -f conclusion="$STATE" \
+              -f conclusion="$STATE" \
             -f output.summary="$DESCRIPTION" \
             -f output.text="$DESCRIPTION" \
             -f output.title="Workflow Status" \
