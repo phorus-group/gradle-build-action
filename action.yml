@@ -32,7 +32,9 @@ runs:
       uses: gradle/actions/setup-gradle@v4
 
     - name: "Setup GAWK"
-      run: sudo apt-get install -y gawk
+      run: |
+        sudo apt update
+        sudo apt-get install -y gawk
       shell: bash
 
     - name: "Run build and tests"
