@@ -45,12 +45,3 @@ jobs:
             -q '.id')
 
           echo "Check created with ID: $CHECK_RUN_ID"
-
-  report_status:
-    name: Report Status Check
-    runs-on: ubuntu-latest
-    needs: [self_check]
-    if: always()
-    env:
-      GH_TOKEN: ${{ github.token }}
-    steps:
