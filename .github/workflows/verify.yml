@@ -18,6 +18,7 @@ jobs:
           path: "mapper"
 
       - name: "Call action"
+        working-directory: "./mapper"
         uses: ./
         with:
           BUILD_AND_TEST: true
