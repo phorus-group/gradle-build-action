@@ -43,9 +43,11 @@ runs:
           echo -e "\e[33mJacoco CSV coverage report not found!\e[0m"
         fi
       if: ${{ inputs.BUILD_AND_TEST == 'true' }}
+      shell: bash
 
     - name: "Run build"
       run: |
         ./gradlew --build-cache build testClasses -x check
         echo "outcome=green" >> "$GITHUB_OUTPUT"
       if: ${{ inputs.BUILD_AND_TEST != 'true' }}
+      shell: bash
