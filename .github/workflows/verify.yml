@@ -1,6 +1,6 @@
 name: Verify Bash Action
 
-on: push
+on: push, workflow_dispatch
 
 jobs:
   static_checks:
@@ -47,5 +47,4 @@ jobs:
       - name: "Call action"
         uses: ./
         with:
-          command: greet
-          who: world
+          BUILD_AND_TEST: true
