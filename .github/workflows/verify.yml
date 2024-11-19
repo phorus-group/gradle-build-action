@@ -32,12 +32,14 @@ jobs:
           STATE: ${{ steps.action.outcome }}
 
   enforce-all-checks:
-    name: All checks
+    name: Enforce all checks
     runs-on: ubuntu-latest
     permissions:
       checks: read
     steps:
-      - name: All Checks
+      - name: Enforce all checks
         uses: poseidon/wait-for-status-checks@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          ignore: Enforce all checks
+
