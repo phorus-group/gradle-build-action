@@ -30,3 +30,14 @@ jobs:
         uses: phorus-group/workflow-status-check-action@main
         with:
           STATE: ${{ steps.action.outcome }}
+
+  enforce-all-checks:
+    name: All checks
+    runs-on: ubuntu-latest
+    permissions:
+      checks: read
+    steps:
+      - name: All Checks
+        uses: poseidon/wait-for-status-checks@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
