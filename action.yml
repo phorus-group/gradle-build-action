@@ -54,19 +54,18 @@ runs:
       if: ${{ inputs.BUILD_AND_TEST != 'true' }}
       shell: bash
 
-    - name: "Prepare build artifact name"
-      id: prepare_build_artifact_name
-      env:
-        BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+    - name: "Prepare branch name"
+      id: prepare_branch_name
       run: |
-        UPLOAD_ARTIFACT_NAME=$(echo "gradle-build-$BRANCH_NAME" | sed "s/\//\_/g")
-        echo "name=$UPLOAD_ARTIFACT_NAME" >> "$GITHUB_OUTPUT"
+        BRANCH_NAME=$(echo "${{ github.head_ref || github.ref_name }}" | sed "s/\//\_/g")
+        echo $BRANCH_NAME
+        echo "name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
       if: ${{ inputs.BUILD_AND_TEST != 'true' }}
       shell: bash
 
     - name: "Upload build artifact"
       uses: actions/upload-artifact@master
       with:
-        name: gradle-build-${{ steps.prepare_build_artifact_name.outputs.name }}
+        name: gradle-build-${{ steps.prepare_branch_name.outputs.name }}
         retention-days: 2
         path: build/libs/*.jar
