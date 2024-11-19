@@ -53,3 +53,9 @@ runs:
         ./gradlew --build-cache build testClasses -x check
       if: ${{ inputs.BUILD_AND_TEST != 'true' }}
       shell: bash
+
+    - name: "Upload build artifact"
+      uses: actions/upload-artifact@master
+      with:
+        name: gradle-build
+        path: build/libs/*.jar
