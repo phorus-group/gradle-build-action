@@ -58,9 +58,7 @@ runs:
       id: prepare_branch_name
       run: |
         BRANCH_NAME=$(echo "${{ github.head_ref || github.ref_name }}" | sed "s/\//\_/g")
-        echo $BRANCH_NAME
         echo "name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
-      if: ${{ inputs.BUILD_AND_TEST != 'true' }}
       shell: bash
 
     - name: "Upload build artifact"
