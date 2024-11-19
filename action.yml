@@ -56,14 +56,13 @@ runs:
 
     - name: "Prepare branch name"
       id: prepare_branch_name
-      run: |
-        BRANCH_NAME=$(echo "${{ github.head_ref || github.ref_name }}" | sed "s/\//\_/g")
-        echo "name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
-      shell: bash
+      uses: phorus-group/unslash-text-action@main
+      with:
+        text: ${{ github.head_ref || github.ref_name }}
 
     - name: "Upload build artifact"
       uses: actions/upload-artifact@master
       with:
-        name: gradle-build-${{ steps.prepare_branch_name.outputs.name }}
+        name: gradle-build-${{ steps.prepare_branch_name.outputs.text }}
         retention-days: 2
         path: build/libs/*.jar
