@@ -57,5 +57,6 @@ runs:
     - name: "Upload build artifact"
       uses: actions/upload-artifact@master
       with:
-        name: gradle-build
+        name: gradle-build-${{ github.ref_name }}
+        retention-days: 2
         path: build/libs/*.jar
