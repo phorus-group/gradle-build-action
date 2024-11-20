@@ -54,6 +54,12 @@ runs:
       if: ${{ inputs.build-and-test != 'true' }}
       shell: bash
 
+    - name: Report Status Check
+      if: always()
+      uses: phorus-group/workflow-status-check-action@main
+      with:
+        state: ${{ steps.action.outcome }}
+
     - name: "Prepare branch name"
       id: prepare_branch_name
       uses: phorus-group/unslash-text-action@main
