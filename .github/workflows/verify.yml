@@ -26,11 +26,6 @@ jobs:
         with:
           build-and-test: true
 
-      - name: Report Status Check
-        uses: phorus-group/workflow-status-check-action@main
-        with:
-          state: ${{ steps.action.outcome }}
-
   enforce-all-checks:
     name: Enforce all checks
     runs-on: ubuntu-latest
