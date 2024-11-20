@@ -49,10 +49,17 @@ runs:
       shell: bash
 
     - name: "Run build"
+      id: build
       run: |
         ./gradlew --build-cache build testClasses -x check
       if: ${{ inputs.build-and-test != 'true' }}
       shell: bash
+
+    - name: Report Status Check
+      if: always()
+      uses: phorus-group/workflow-status-check-action@main
+      with:
+        state: ${{ inputs.build-and-test != 'true' && steps.build.outcome || steps.build_and_test.outcome }}
 
     - name: "Prepare branch name"
       id: prepare_branch_name
