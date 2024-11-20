@@ -59,7 +59,7 @@ runs:
       if: always()
       uses: phorus-group/workflow-status-check-action@main
       with:
-        state: ${{ steps.build.outcome || steps.build_and_test.outcome }}
+        state: ${{ inputs.build-and-test != 'true' && steps.build.outcome || steps.build_and_test.outcome }}
 
     - name: "Prepare branch name"
       id: prepare_branch_name
