@@ -24,12 +24,12 @@ jobs:
         id: action
         uses: ./action
         with:
-          BUILD_AND_TEST: true
+          build-and-test: true
 
       - name: Report Status Check
         uses: phorus-group/workflow-status-check-action@main
         with:
-          STATE: ${{ steps.action.outcome }}
+          state: ${{ steps.action.outcome }}
 
   enforce-all-checks:
     name: Enforce all checks
