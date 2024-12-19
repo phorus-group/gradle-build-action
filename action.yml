@@ -7,19 +7,19 @@ inputs:
     required: false
     default: "false"
   jacoco-csv-location:
-    description: "Location of Jacoco CSV report, only used if BUILD_AND_TEST is set to true"
+    description: "Location of Jacoco CSV report, only used if build-and-test is set to true"
     required: false
     default: "./build/reports/jacoco/test/jacocoTestReport.csv"
 outputs:
   total-lines:
-    description: "Total lines to cover with tests, only set if BUILD_AND_TEST is set to true"
-    value: ${{ steps.build_and_test.outputs.total-lines }}
+    description: "Total lines to cover with tests, only set if build-and-test is set to true"
+    value: ${{ steps.build-and-test.outputs.total-lines }}
   lines-covered:
-    description: "Total lines to covered with tests, only set if BUILD_AND_TEST is set to true"
-    value: ${{ steps.build_and_test.outputs.lines-covered }}
+    description: "Total lines to covered with tests, only set if build-and-test is set to true"
+    value: ${{ steps.build-and-test.outputs.lines-covered }}
   coverage-percentage:
-    description: "The coverage percentage, only set if BUILD_AND_TEST is set to true"
-    value: ${{ steps.build_and_test.outputs.coverage-percentage }}
+    description: "The coverage percentage, only set if build-and-test is set to true"
+    value: ${{ steps.build-and-test.outputs.coverage-percentage }}
 
 runs:
   using: composite
@@ -34,9 +34,17 @@ runs:
       uses: gradle/actions/setup-gradle@v4
 
     - name: "Run build and tests"
-      id: build_and_test
+      id: build-and-test
+      shell: bash
       run: |
         ./gradlew --build-cache build
+      if: ${{ inputs.build-and-test == 'true' }}
+
+    - name: "Report coverage"
+      id: report-coverage
+      if: ${{ !cancelled() && inputs.build-and-test == 'true' }}
+      shell: bash
+      run: |
         if [ -f ${{ inputs.jacoco-csv-location }} ]; then
           awk -F "," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' ${{ inputs.jacoco-csv-location }}
           echo "total-lines=$(awk -F "," '{ instructions += $4 + $5 } END { print instructions }' ${{ inputs.jacoco-csv-location }})" >> "$GITHUB_OUTPUT"
@@ -45,8 +53,6 @@ runs:
         else
           echo -e "\e[33mJacoco CSV coverage report not found!\e[0m"
         fi
-      if: ${{ inputs.build-and-test == 'true' }}
-      shell: bash
 
     - name: "Report test summary"
       if: ${{ !cancelled() && inputs.build-and-test == 'true' }}
