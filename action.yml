@@ -48,6 +48,12 @@ runs:
       if: ${{ inputs.build-and-test == 'true' }}
       shell: bash
 
+    - name: "Report test summary"
+      if: ${{ !cancelled() && inputs.build-and-test == 'true' }}
+      uses: test-summary/action@v2
+      with:
+        paths: "build/test-results/test/*.xml"
+
     - name: "Run build"
       id: build
       run: |
