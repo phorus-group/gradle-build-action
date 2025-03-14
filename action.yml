@@ -86,4 +86,4 @@ runs:
       with:
         name: gradle-build
         retention-days: 2
-        path: build/libs/*.jar
+        path: build
