@@ -52,7 +52,7 @@ runs:
       if: ${{ inputs.build-and-test == 'true' }}
       shell: bash
       run: |
-        ./gradlew --build-cache build
+        ./gradlew --build-cache build installDist
 
     - name: "Report coverage"
       id: report-coverage
@@ -79,7 +79,7 @@ runs:
       if: ${{ inputs.build-and-test != 'true' }}
       shell: bash
       run: |
-        ./gradlew --build-cache build testClasses -x check
+        ./gradlew --build-cache build installDist testClasses -x check
 
     - name: "Upload build artifact"
       uses: actions/upload-artifact@master
