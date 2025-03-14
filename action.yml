@@ -1,5 +1,5 @@
 name: Gradle Build Action
-description: A sample GitHub Action written in Bash
+description: A GitHub Action to build and (optionally) test a gradle project
 
 inputs:
   java-version:
