@@ -4,17 +4,14 @@ description: A GitHub Action to build and (optionally) test a gradle project
 inputs:
   java-version:
     description: "Java version to use"
-    type: string
     required: false
     default: "21"
   java-distribution:
     description: "Java distribution to use"
-    type: string
     required: false
     default: "temurin"
   gradle-version:
     description: "Gradle version to use"
-    type: string
     required: false
     default: "8.5"
   build-and-test:
