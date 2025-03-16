@@ -37,12 +37,14 @@ runs:
       with:
         distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
+        cache: gradle
 
     - name: "Run build and tests"
       id: build-and-test
       if: ${{ inputs.build-and-test == 'true' }}
       shell: bash
       run: |
+        export GRADLE_USER_HOME=`pwd`/.gradle
         ./gradlew --build-cache build installDist
 
     - name: "Report coverage"
