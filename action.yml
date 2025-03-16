@@ -44,7 +44,6 @@ runs:
       if: ${{ inputs.build-and-test == 'true' }}
       shell: bash
       run: |
-        export GRADLE_USER_HOME=`pwd`/.gradle
         ./gradlew --build-cache build installDist
 
     - name: "Report coverage"
