@@ -37,13 +37,18 @@ runs:
       with:
         distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
+        cache: gradle
   
     - name: "Run build and tests"
       id: build-and-test
       if: ${{ inputs.build-and-test == 'true' }}
       shell: bash
       run: |
-        ./gradlew --build-cache build installDist
+        if ./gradlew tasks --all | grep -q "^installDist"; then
+          ./gradlew --build-cache build installDist
+        else
+          ./gradlew --build-cache build
+        fi
 
     - name: "Report coverage"
       id: report-coverage
@@ -70,7 +75,11 @@ runs:
       if: ${{ inputs.build-and-test != 'true' }}
       shell: bash
       run: |
-        ./gradlew --build-cache build installDist testClasses -x check
+        if ./gradlew tasks --all | grep -q "^installDist"; then
+          ./gradlew --build-cache build installDist testClasses -x check
+        else
+          ./gradlew --build-cache build testClasses -x check
+        fi
 
     - name: "Upload build artifact"
       uses: actions/upload-artifact@master
