@@ -37,6 +37,7 @@ runs:
       with:
         distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
+        cache: gradle
   
     - name: "Run build and tests"
       id: build-and-test
