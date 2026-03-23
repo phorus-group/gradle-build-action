@@ -22,10 +22,6 @@ inputs:
     description: "Location of Jacoco XML report"
     required: false
     default: "./build/reports/jacoco/test/jacocoTestReport.xml"
-  enable-codecov:
-    description: "Set to true to upload coverage to Codecov"
-    required: false
-    default: "false"
   codecov-token:
     description: "Codecov token for private repos. Public repos can leave this empty."
     required: false
@@ -98,7 +94,7 @@ runs:
         paths: "build/test-results/test/*.xml"
 
     - name: "Upload coverage to Codecov"
-      if: ${{ !cancelled() && inputs.build-and-test == 'true' && inputs.enable-codecov == 'true' }}
+      if: ${{ !cancelled() && inputs.build-and-test == 'true' && inputs.codecov-token != '' }}
       uses: codecov/codecov-action@v5
       with:
         files: ${{ inputs.jacoco-xml-location }}
