@@ -26,6 +26,14 @@ inputs:
     description: "Codecov token for private repos. Public repos can leave this empty."
     required: false
     default: ""
+  registry-username:
+    description: "Username for the Gradle dependency registry"
+    required: false
+    default: ""
+  registry-password:
+    description: "Password or token for the Gradle dependency registry"
+    required: false
+    default: ""
 outputs:
   total-lines:
     description: "Total lines to cover with tests"
@@ -51,6 +59,9 @@ runs:
       id: build-and-test
       if: ${{ inputs.build-and-test == 'true' }}
       shell: bash
+      env:
+        ORG_GRADLE_PROJECT_readUsername: ${{ inputs.registry-username }}
+        ORG_GRADLE_PROJECT_readPassword: ${{ inputs.registry-password }}
       run: |
         if ./gradlew tasks --all | grep -q "^installDist"; then
           ./gradlew --build-cache build installDist
@@ -105,6 +116,9 @@ runs:
       id: build
       if: ${{ inputs.build-and-test != 'true' }}
       shell: bash
+      env:
+        ORG_GRADLE_PROJECT_readUsername: ${{ inputs.registry-username }}
+        ORG_GRADLE_PROJECT_readPassword: ${{ inputs.registry-password }}
       run: |
         if ./gradlew tasks --all | grep -q "^installDist"; then
           ./gradlew --build-cache build installDist testClasses -x check
